@@ -28,6 +28,7 @@ import { defineComponent, reactive } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from './components/ColumnList/index.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader/index.vue'
+import ValidateInput, { RulesProp } from './components/ValidateInput/index.vue'
 const currentUser: UserProps = {
   isLogin: true,
   name: '崔浩然',
