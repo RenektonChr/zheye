@@ -5,7 +5,10 @@
     <form>
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
-        <validate-input v-model="emailValue" :rules="emailRules"></validate-input>
+        <validate-input
+          v-model="emailValue"
+          :rules="emailRules">
+        </validate-input>
         <p>emailValue: {{ emailValue }}</p>
       </div>
       <div class="mb-3">
