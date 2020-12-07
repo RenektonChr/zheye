@@ -7,32 +7,28 @@
         <label class="form-label">邮箱地址</label>
         <validate-input
           v-model="emailValue"
-          :rules="emailRules">
-        </validate-input>
-        <p>emailValue: {{ emailValue }}</p>
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-          v-model="emailRef.val"
-          @blur="validateEmail"
+          :rules="emailRules"
+          placeholder="请输入邮箱地址"
+          type="text"
         >
-        <div class="form-text" v-if="emailRef.error">{{ emailRef.message }}</div>
+        </validate-input>
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">密码</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
+        <label class="form-label">密码</label>
+        <validate-input
+          v-model="pwdValue"
+          :rules="pwdRules"
+          placeholder="请输入邮箱地址"
+          type="password"
+        >
+        </validate-input>
       </div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from './components/ColumnList/index.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader/index.vue'
@@ -79,7 +75,6 @@ const testData: ColumnProps[] = [
     avatar: require('../src/assets/pic.jpg')
   }
 ]
-const eamilReg = /^(([^()[\]\\.,;:\s@"]+(\.[^()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export default defineComponent({
   name: 'App',
@@ -89,32 +84,22 @@ export default defineComponent({
     ValidateInput
   },
   setup () {
-    const emailValue = ref('cuihaoran')
+    const emailValue = ref('')
+    const pwdValue = ref('')
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮箱不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱' }
     ]
-    const emailRef = reactive({
-      val: '',
-      error: false,
-      message: ''
-    })
-    const validateEmail = () => {
-      if (emailRef.val.trim() === '') {
-        emailRef.error = true
-        emailRef.message = 'can not be empty'
-      } else if (!eamilReg.test(emailRef.val)) {
-        emailRef.error = true
-        emailRef.message = 'should be valid email'
-      }
-    }
+    const pwdRules: RulesProp = [
+      { type: 'required', message: '电子邮箱不能为空' }
+    ]
     return {
       list: testData,
       currentUser,
-      emailRef,
-      validateEmail,
       emailRules,
-      emailValue
+      emailValue,
+      pwdRules,
+      pwdValue
     }
   }
 })
