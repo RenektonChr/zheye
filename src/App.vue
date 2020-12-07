@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <global-header :user="currentUser" />
-    <column-list :list="list" />
-    <ValidateForm @form-submit="onFormSubmit">
+    <!-- <column-list :list="list" />
+    <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input
@@ -29,7 +29,18 @@
           <button class="btn btn-danger">Submit</button>
         </span>
       </template>
-    </ValidateForm>
+    </validate-form> -->
+    <footer class="text-center py-4 text-seconddary bg-light mt-6">
+      <small>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">课程</li>
+          <li class="list-inline-item">文档</li>
+          <li class="list-inline-item">联系</li>
+          <li class="list-inline-item">更多</li>
+          <li class="list-inline-item">@ 2020 zheye专栏</li>
+        </ul>
+      </small>
+    </footer>
   </div>
 </template>
 
@@ -93,8 +104,8 @@ export default defineComponent({
   },
   setup () {
     const inputRef = ref<any>()
-    const emailValue = ref('123@test.com')
-    const pwdValue = ref('123')
+    const emailValue = ref('')
+    const pwdValue = ref('')
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮箱不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱' }

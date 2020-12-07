@@ -62,7 +62,7 @@ export default defineComponent({
       context.emit('update:modelValue', targetValue)
     }
     onMounted(() => {
-      emitter.emit('form-item-created', inputRef.val)
+      emitter.emit('form-item-created', validateInput)
     })
     return {
       inputRef,
