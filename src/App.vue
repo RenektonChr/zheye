@@ -2,7 +2,7 @@
   <div class="container">
     <global-header :user="currentUser" />
     <column-list :list="list" />
-    <form>
+    <ValidateForm @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input
@@ -10,6 +10,7 @@
           :rules="emailRules"
           placeholder="请输入邮箱地址"
           type="text"
+          ref="inputRef"
         >
         </validate-input>
       </div>
@@ -23,7 +24,12 @@
         >
         </validate-input>
       </div>
-    </form>
+      <template #submit>
+        <span>
+          <button class="btn btn-danger">Submit</button>
+        </span>
+      </template>
+    </ValidateForm>
   </div>
 </template>
 
@@ -33,6 +39,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from './components/ColumnList/index.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader/index.vue'
 import ValidateInput, { RulesProp } from './components/ValidateInput/index.vue'
+import ValidateForm from './components/ValidateForm/index.vue'
 const currentUser: UserProps = {
   isLogin: true,
   name: '崔浩然',
@@ -81,11 +88,13 @@ export default defineComponent({
   components: {
     GlobalHeader,
     ColumnList,
-    ValidateInput
+    ValidateInput,
+    ValidateForm
   },
   setup () {
-    const emailValue = ref('')
-    const pwdValue = ref('')
+    const inputRef = ref<any>()
+    const emailValue = ref('123@test.com')
+    const pwdValue = ref('123')
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮箱不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱' }
@@ -93,13 +102,19 @@ export default defineComponent({
     const pwdRules: RulesProp = [
       { type: 'required', message: '电子邮箱不能为空' }
     ]
+    const onFormSubmit = (result: boolean) => {
+      console.log('result--->', inputRef.value.validateInput())
+      console.log(result)
+    }
     return {
       list: testData,
       currentUser,
       emailRules,
       emailValue,
       pwdRules,
-      pwdValue
+      pwdValue,
+      onFormSubmit,
+      inputRef
     }
   }
 })
