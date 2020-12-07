@@ -1,36 +1,8 @@
 <template>
   <div class="container">
     <global-header :user="currentUser" />
-    <!-- <column-list :list="list" />
-    <validate-form @form-submit="onFormSubmit">
-      <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
-        <validate-input
-          v-model="emailValue"
-          :rules="emailRules"
-          placeholder="请输入邮箱地址"
-          type="text"
-          ref="inputRef"
-        >
-        </validate-input>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">密码</label>
-        <validate-input
-          v-model="pwdValue"
-          :rules="pwdRules"
-          placeholder="请输入邮箱地址"
-          type="password"
-        >
-        </validate-input>
-      </div>
-      <template #submit>
-        <span>
-          <button class="btn btn-danger">Submit</button>
-        </span>
-      </template>
-    </validate-form> -->
-    <footer class="text-center py-4 text-seconddary bg-light mt-6">
+    <router-view />
+    <Footer class="text-center py-4 text-seconddary bg-light mt-6">
       <small>
         <ul class="list-inline mb-0">
           <li class="list-inline-item">课程</li>
@@ -40,7 +12,7 @@
           <li class="list-inline-item">@ 2020 zheye专栏</li>
         </ul>
       </small>
-    </footer>
+    </Footer>
   </div>
 </template>
 
@@ -51,6 +23,7 @@ import ColumnList, { ColumnProps } from './components/ColumnList/index.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader/index.vue'
 import ValidateInput, { RulesProp } from './components/ValidateInput/index.vue'
 import ValidateForm from './components/ValidateForm/index.vue'
+import Footer from './components/Footer/index.vue'
 const currentUser: UserProps = {
   isLogin: true,
   name: '崔浩然',
@@ -98,9 +71,10 @@ export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
-    ColumnList,
-    ValidateInput,
-    ValidateForm
+    // ColumnList,
+    // ValidateInput,
+    // ValidateForm,
+    Footer
   },
   setup () {
     const inputRef = ref<any>()
