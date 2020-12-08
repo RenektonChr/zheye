@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { testData, testPosts, ColumnProps } from '../data/testData'
+import axios from 'axios'
 
 interface UserProps {
   isLogin: boolean;
@@ -7,23 +7,35 @@ interface UserProps {
   id?: number;
   columnId?: number;
 }
+interface ImageProps {
+  _id?: string;
+  url?: string;
+  createdAt?: string;
+}
+export interface ColumnProps {
+  _id: string;
+  title: string;
+  avatar?: ImageProps;
+  description: string;
+}
 export interface GlobalDataProps {
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;
 }
 export interface PostProps {
-  id: number;
+  _id: string;
   title: string;
-  content: string;
-  image?: string;
+  excerpt?: string;
+  content?: string;
+  image?: ImageProps;
   createdAt: string;
-  columnId: number;
+  column: string;
 }
 const store = createStore<GlobalDataProps>({
   state: {
-    columns: testData,
-    posts: testPosts,
+    columns: [],
+    posts: [],
     user: { isLogin: true, name: 'renekton', columnId: 1 }
   },
   mutations: {
@@ -32,20 +44,43 @@ const store = createStore<GlobalDataProps>({
     },
     createPost (state, newPost) {
       state.posts.push(newPost)
+    },
+    fetchColumns (state, rawData) {
+      state.columns = rawData.data.list
+    },
+    fetchColumn (state, rawData) {
+      state.columns = [rawData.data]
+    },
+    fetchPosts (state, rawData) {
+      state.posts = rawData.data.list
+    }
+  },
+  actions: {
+    fetchColumns (context) {
+      axios.get('/columns').then(res => {
+        context.commit('fetchColumns', res.data)
+      })
+    },
+    fetchColumn ({ commit }, cid) {
+      axios.get(`/columns/${cid}`).then(res => {
+        commit('fetchColumn', res.data)
+      })
+    },
+    fetchPosts ({ commit }, cid) {
+      axios.get(`/columns/${cid}/posts`).then(res => {
+        commit('fetchPosts', res.data)
+      })
     }
   },
   getters: {
-    biggerColumnsLen (state) {
-      return state.columns.filter(c => c.id > 2).length
-    },
     getColumnById (state) {
-      return (id: number) => {
-        return state.columns.find(c => c.id === id)
+      return (id: string) => {
+        return state.columns.find(c => c._id === id)
       }
     },
     getPostsByCid (state) {
-      return (cid: number) => {
-        return state.posts.filter(post => post.columnId === cid)
+      return (cid: string) => {
+        return state.posts.filter(post => post.column === cid)
       }
     }
   }
