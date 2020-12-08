@@ -1,25 +1,37 @@
 import { createStore } from 'vuex'
-import { testData, testPosts, ColumnProps, PostProps } from '../data/testData'
+import { testData, testPosts, ColumnProps } from '../data/testData'
 
 interface UserProps {
   isLogin: boolean;
   name?: string;
   id?: number;
+  columnId?: number;
 }
-export interface ClobalDataProps {
+export interface GlobalDataProps {
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;
 }
-const store = createStore<ClobalDataProps>({
+export interface PostProps {
+  id: number;
+  title: string;
+  content: string;
+  image?: string;
+  createdAt: string;
+  columnId: number;
+}
+const store = createStore<GlobalDataProps>({
   state: {
     columns: testData,
     posts: testPosts,
-    user: { isLogin: false }
+    user: { isLogin: true, name: 'renekton', columnId: 1 }
   },
   mutations: {
     login (state) {
-      state.user = { ...state.user, isLogin: true, name: 'renekton' }
+      state.user = { ...state.user, isLogin: true, name: 'renekton', columnId: 1 }
+    },
+    createPost (state, newPost) {
+      state.posts.push(newPost)
     }
   },
   getters: {

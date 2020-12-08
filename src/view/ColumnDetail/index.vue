@@ -17,7 +17,7 @@
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { ClobalDataProps } from '../../store/index'
+import { GlobalDataProps } from '../../store/index'
 import PostList from '../../components/PostList/index.vue'
 export default defineComponent({
   components: {
@@ -25,7 +25,7 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    const store = useStore<ClobalDataProps>()
+    const store = useStore<GlobalDataProps>()
     const currentId = Number(route.params.id)
     const column = computed(() => store.getters.getColumnById(currentId))
     const list = computed(() => store.getters.getPostsByCid(currentId))

@@ -6,7 +6,7 @@
           <img src="../../assets/callout.svg" alt="callout" class="w-50">
           <h2 class="font-weight-light">随心写作，自由表达</h2>
           <p>
-            <a href="#" class="btn btn-primary my-2">开始写文章</a>
+            <a href="/create" class="btn btn-primary my-2">开始写文章</a>
           </p>
         </div>
       </div>
@@ -19,15 +19,15 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
-import { ClobalDataProps } from '../../store/index'
-import ColumnList from '../../components/ColumnList'
+import { GlobalDataProps } from '../../store/index'
+import ColumnList from '../../components/ColumnList/index.vue'
 
 export default defineComponent({
   components: {
     ColumnList
   },
   setup () {
-    const store = useStore<ClobalDataProps>()
+    const store = useStore<GlobalDataProps>()
     const list = computed(() => store.state.columns)
     const biggerColumnsLen = computed(() => store.getters.biggerColumnsLen)
     return {

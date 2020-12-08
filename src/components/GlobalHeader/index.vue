@@ -9,7 +9,7 @@
       <li class="list-inline-item">
         <Dropdown :title="`你好，${user.name}`">
           <dropdown-item>
-            <a href="#" class="dropdown-item">新建文章</a>
+            <a href="/create" class="dropdown-item">新建文章</a>
           </dropdown-item>
           <dropdown-item disabled>
             <a href="#" class="dropdown-item">编辑资料</a>
