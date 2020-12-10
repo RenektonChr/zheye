@@ -1,7 +1,7 @@
 <template>
   <div class="container w-100">
     <global-header :user="currentUser" />
-    <loading text="拼命加载中" background="rgba(0,0,0,.8)"></loading>
+    <loading v-if="isLoading" text="拼命加载中" background="rgba(0,0,0,.8)"></loading>
     <router-view />
     <Footer class="text-center py-4 text-seconddary bg-light mt-6">
       <small>
