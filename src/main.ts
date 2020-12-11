@@ -12,6 +12,11 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(config => {
   store.commit('setLoading', false)
   return config
+}, e => {
+  const { error } = e.response.data
+  store.commit('setError', { status: true, message: error })
+  store.commit('setLoading', false)
+  return Promise.reject(error)
 })
 const app = createApp(App)
 app.use(router)

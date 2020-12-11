@@ -1,12 +1,12 @@
 import { createStore, Commit } from 'vuex'
 import axios from 'axios'
 
-interface UserProps {
+export interface UserProps {
   isLogin: boolean;
-  name: string;
   nickName?: string;
-  id?: number;
-  columnId?: number;
+  _id?: number;
+  column?: number;
+  email?: string;
 }
 interface ImageProps {
   _id?: string;
@@ -19,7 +19,12 @@ export interface ColumnProps {
   avatar?: ImageProps;
   description: string;
 }
+export interface GlobalErrorProps {
+  status: boolean;
+  message?: string;
+}
 export interface GlobalDataProps {
+  error: GlobalErrorProps;
   token: string;
   loading: boolean;
   columns: ColumnProps[];
@@ -47,11 +52,12 @@ const postAndCommit = async (url: string, mutationName: string, commit: Commit, 
 }
 const store = createStore<GlobalDataProps>({
   state: {
-    token: '',
+    error: { status: false },
+    token: localStorage.getItem('token') || '',
     loading: false,
     columns: [],
     posts: [],
-    user: { isLogin: false, name: 'renekton', columnId: 1 }
+    user: { isLogin: false }
   },
   mutations: {
     createPost (state, newPost) {
@@ -69,12 +75,16 @@ const store = createStore<GlobalDataProps>({
     setLoading (state, status) {
       state.loading = status
     },
+    setError (state, e: GlobalErrorProps) {
+      state.error = e
+    },
     fetchCurrentUser (state, rowData) {
       state.user = { isLogin: true, ...rowData.data }
     },
     login (state, rowData) {
       const { token } = rowData.data
       state.token = token
+      localStorage.setItem('token', token)
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
     }
   },
