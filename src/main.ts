@@ -7,6 +7,7 @@ import store from './store/index'
 axios.defaults.baseURL = 'http://localhost:8080/api/'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
+  store.commit('setError', { status: false, message: '' })
   return config
 })
 axios.interceptors.response.use(config => {
