@@ -11,6 +11,7 @@
         </div>
       </div>
     </section>
+    <upload action="/upload"></upload>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
   </div>
@@ -21,10 +22,12 @@ import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../../store/index'
 import ColumnList from '../../components/ColumnList/index.vue'
+import Upload from '../../components/Upload/index.vue'
 
 export default defineComponent({
   components: {
-    ColumnList
+    ColumnList,
+    Upload
   },
   setup () {
     const store = useStore<GlobalDataProps>()
