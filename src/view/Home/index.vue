@@ -6,7 +6,7 @@
           <img src="../../assets/callout.svg" alt="callout" class="w-50">
           <h2 class="font-weight-light">随心写作，自由表达</h2>
           <p>
-            <a href="/create" class="btn btn-primary my-2">开始写文章</a>
+            <router-link to="/create" class="btn btn-primary my-2">开始写文章</router-link>
           </p>
         </div>
       </div>

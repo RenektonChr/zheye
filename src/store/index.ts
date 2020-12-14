@@ -5,7 +5,7 @@ export interface UserProps {
   isLogin: boolean;
   nickName?: string;
   _id?: number;
-  column?: number;
+  column?: string;
   email?: string;
 }
 interface ImageProps {
@@ -32,12 +32,12 @@ export interface GlobalDataProps {
   user: UserProps;
 }
 export interface PostProps {
-  _id: string;
+  _id?: string;
   title: string;
   excerpt?: string;
   content?: string;
   image?: ImageProps;
-  createdAt: string;
+  createdAt?: string;
   column: string;
 }
 const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
