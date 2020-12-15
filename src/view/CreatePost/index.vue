@@ -4,6 +4,7 @@
     <upload
       action="/upload"
       :beforeUpload="uploadCheck"
+      @file-uploaded="handleFileUploaded"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4 file-upload-container"
     >
       <h2>点击上传头图</h2>
@@ -49,13 +50,12 @@
 import { defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { GlobalDataProps, PostProps } from '../../store/index'
+import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '../../store/index'
 import ValidateForm from '@/components/ValidateForm/index.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput/index.vue'
 import Upload from '../../components/Upload/index.vue'
 import { beforeUploadCheck } from '../../utils/helper'
 import CreateMessage from '../../components/CreateMessage/index'
-// import axios from 'axios'
 export default defineComponent({
   components: {
     ValidateForm,
@@ -67,23 +67,36 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const titleVal = ref('')
     const contentVal = ref('')
+    let imageId = ''
     const titleRules: RulesProp = [
       { type: 'required', message: '文章标题不能为空' }
     ]
     const contentRules: RulesProp = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    const handleFileUploaded = (rawData: ResponseType<ImageProps>) => {
+      if (rawData.data._id) {
+        imageId = rawData.data._id
+      }
+    }
     const onFormSubmit = (result: boolean) => {
       if (result) {
-        const { column } = store.state.user
+        const { column, _id } = store.state.user
         if (column) {
           const newPost: PostProps = {
             title: titleVal.value,
             content: contentVal.value,
-            column
+            column,
+            author: _id
           }
-          store.commit('createPost', newPost)
-          router.push({ name: 'column', params: { id: column } })
+          if (imageId) {
+            newPost.image = imageId
+          }
+          store.dispatch('createPost', newPost).then((res) => {
+            console.log(res)
+            CreateMessage('发表成功', 'success')
+            router.push({ name: 'column', params: { id: column } })
+          })
         }
       }
     }
@@ -104,7 +117,8 @@ export default defineComponent({
       titleRules,
       contentRules,
       onFormSubmit,
-      uploadCheck
+      uploadCheck,
+      handleFileUploaded
     }
   }
 })
