@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a class="navbar-brand" href="#">然哥专栏</a>
+    <router-link class="navbar-brand" to="/">然哥专栏</router-link >
     <ul v-if="!user.isLogin" class="list-inline mb-0">
       <li class="list-inline-item"><a href="/login" class="btn btn-outline-light my-2">登录</a></li>
       <li class="list-inline-item"><a href="/signup" class="btn btn-outline-light my-2">注册</a></li>
@@ -15,7 +15,7 @@
             <a href="#" class="dropdown-item">编辑资料</a>
           </dropdown-item>
           <dropdown-item>
-            <a href="#" class="dropdown-item">退出登录</a>
+            <a @click="handleLogout" class="dropdown-item">退出登录</a>
           </dropdown-item>
         </Dropdown>
       </li>
@@ -36,9 +36,18 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['handle-logout'],
   components: {
     Dropdown,
     DropdownItem
+  },
+  setup (props, context) {
+    const handleLogout = () => {
+      context.emit('handle-logout')
+    }
+    return {
+      handleLogout
+    }
   }
 })
 </script>
