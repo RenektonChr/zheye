@@ -11,7 +11,7 @@
         </div>
       </div>
     </section>
-    <upload action="/upload"></upload>
+    <upload action="/upload" :beforeUpload="beforeUpload"></upload>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
   </div>
@@ -23,6 +23,7 @@ import { useStore } from 'vuex'
 import { GlobalDataProps } from '../../store/index'
 import ColumnList from '../../components/ColumnList/index.vue'
 import Upload from '../../components/Upload/index.vue'
+import CreateMessage from '../../components/CreateMessage'
 
 export default defineComponent({
   components: {
@@ -35,10 +36,16 @@ export default defineComponent({
       store.dispatch('fetchColumns')
     })
     const list = computed(() => store.state.columns)
-    const biggerColumnsLen = computed(() => store.getters.biggerColumnsLen)
+    const beforeUpload = (file: File) => {
+      const isJPG = file.type === 'image/jpg'
+      if (!isJPG) {
+        CreateMessage('图片只能上传JPG格式！', 'error')
+      }
+      return isJPG
+    }
     return {
       list,
-      biggerColumnsLen
+      beforeUpload
     }
   }
 })
