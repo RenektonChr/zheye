@@ -11,7 +11,7 @@
         </div>
       </div>
     </section>
-    <upload action="/upload" :beforeUpload="beforeUpload"></upload>
+    <upload action="/upload" :beforeUpload="beforeUpload" @file-uploaded="onFileUploaded"></upload>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
   </div>
@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '../../store/index'
+import { GlobalDataProps, ResponseType, ImageProps } from '../../store/index'
 import ColumnList from '../../components/ColumnList/index.vue'
 import Upload from '../../components/Upload/index.vue'
 import CreateMessage from '../../components/CreateMessage'
@@ -37,15 +37,21 @@ export default defineComponent({
     })
     const list = computed(() => store.state.columns)
     const beforeUpload = (file: File) => {
-      const isJPG = file.type === 'image/jpg'
+      console.log('beforeUpload')
+      const isJPG = file.type === 'image/jpeg'
       if (!isJPG) {
         CreateMessage('图片只能上传JPG格式！', 'error')
       }
       return isJPG
     }
+    const onFileUploaded = (rawData: ResponseType<ImageProps>) => {
+      console.log('onFileUploaded')
+      CreateMessage(`上传图片ID${rawData.data._id}`, 'success')
+    }
     return {
       list,
-      beforeUpload
+      beforeUpload,
+      onFileUploaded
     }
   }
 })

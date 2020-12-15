@@ -29,7 +29,8 @@ export default defineComponent({
       type: Function as PropType<checkFunction>
     }
   },
-  setup (props) {
+  emits: ['file-uploaded', 'file-uploaded-error'],
+  setup (props, context) {
     const fileInput = ref<null | HTMLElement>(null)
     const fileStatus = ref<UploadStatus>('ready')
     const triggerUoload = () => {
@@ -39,11 +40,16 @@ export default defineComponent({
     }
     const handleFileChange = (e: Event) => {
       const currentTarget = e.target as HTMLInputElement
+      console.log('currentTarget--->', currentTarget)
       if (currentTarget.files) {
         const files = Array.from(currentTarget.files)
-        if(props.beforeUpload) {
+        if (props.beforeUpload) {
           const result = props.beforeUpload(files[0])
-          if(!result) {
+          if (!result) {
+            if (fileInput.value) {
+              const fileInputEle = fileInput.value as HTMLInputElement
+              fileInputEle.value = ''
+            }
             return
           }
         }
@@ -55,11 +61,12 @@ export default defineComponent({
             'Content-Type': 'multipart/form-data'
           }
         }).then(result => {
-          console.log('result ----->', result.data)
           fileStatus.value = 'success'
-        }).catch(e => {
+          context.emit('file-uploaded', result.data)
+        }).catch(error => {
           console.log('error--->', e)
           fileStatus.value = 'error'
+          context.emit('file-uploaded-error', { error })
         }).finally(() => {
           if (fileInput.value) {
             const fileInputEle = fileInput.value as HTMLInputElement
