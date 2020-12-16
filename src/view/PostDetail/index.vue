@@ -56,7 +56,7 @@ export default defineComponent({
       store.dispatch('fetchPost', currentId)
       console.log(router)
     })
-    const currentPost = computed<PostProps>(() => store.state.currentPost)
+    const currentPost = computed<PostProps>(() => store.getters.getCurrentPost(currentId))
     const currentHTML = computed(() => {
       const { content, isHTML } = currentPost.value
       if (currentPost.value && content) {

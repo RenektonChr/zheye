@@ -6,11 +6,11 @@
     <Footer class="text-center py-4 text-seconddary bg-light mt-6">
       <small>
         <ul class="list-inline mb-0">
-          <li class="list-inline-item">诚心</li>
-          <li class="list-inline-item">正义</li>
-          <li class="list-inline-item">联系</li>
-          <li class="list-inline-item">更多</li>
-          <li class="list-inline-item">@ 2020 zheye专栏</li>
+          <li class="list-inline-item">格物</li>
+          <li class="list-inline-item">致知</li>
+          <li class="list-inline-item">诚意</li>
+          <li class="list-inline-item">正心</li>
+          <li class="list-inline-item">@ 2020 然哥专栏</li>
         </ul>
       </small>
     </Footer>
