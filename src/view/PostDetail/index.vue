@@ -1,6 +1,7 @@
 <template>
   <div class="post-detail-page">
-    <modal title="删除文章" :visible="modalIsVisible"
+    <modal title="删除文章"
+      :visible="modalIsVisible"
       @modal-on-close="modalIsVisible = false"
       @modal-on-confirm="hideAndDelete"
     >
@@ -82,10 +83,8 @@ export default defineComponent({
     const hideAndDelete = () => {
       modalIsVisible.value = false
       store.dispatch('deletePost', currentId).then((rawData: ResponseType<PostProps>) => {
-        CreateMessage('删除成功，2秒后跳转到专栏首页', 'success', 2000)
-        setTimeout(() => {
-          router.push({ name: 'column', params: { id: rawData.data.column } })
-        }, 2000)
+        CreateMessage('删除成功', 'success', 2000)
+        router.push({ name: 'column', params: { id: rawData.data.column } })
       })
     }
     return {

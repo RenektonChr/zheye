@@ -27,6 +27,7 @@ import { defineComponent } from 'vue'
 import useDOMCreate from '../../hooks/useDOMCreate'
 export default defineComponent({
   name: 'modal',
+  emits: ['modal-on-close', 'modal-on-confirm'],
   props: {
     title: String,
     visible: {
@@ -34,7 +35,6 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['modal-on-close', 'modal-on-confirm'],
   setup (props, context) {
     useDOMCreate('modal')
     const onClose = () => {

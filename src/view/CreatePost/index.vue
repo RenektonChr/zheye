@@ -5,6 +5,7 @@
       action="/upload"
       :beforeUpload="uploadCheck"
       @file-uploaded="handleFileUploaded"
+      @file-uploaded-error="handleFileFail"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4 file-upload-container"
     >
       <h2>点击上传头图</h2>
@@ -75,9 +76,14 @@ export default defineComponent({
       { type: 'required', message: '文章详情不能为空' }
     ]
     const handleFileUploaded = (rawData: ResponseType<ImageProps>) => {
+      CreateMessage('上传成功', 'success')
       if (rawData.data._id) {
         imageId = rawData.data._id
       }
+    }
+    const handleFileFail = (error: any) => {
+      console.log(error)
+      CreateMessage('上传失败', 'error')
     }
     const onFormSubmit = (result: boolean) => {
       if (result) {
@@ -118,7 +124,8 @@ export default defineComponent({
       contentRules,
       onFormSubmit,
       uploadCheck,
-      handleFileUploaded
+      handleFileUploaded,
+      handleFileFail
     }
   }
 })

@@ -1,5 +1,5 @@
 import { createStore, Commit } from 'vuex'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 export interface ResponseType<P = {}> {
   code: number;
@@ -59,6 +59,16 @@ const getAndCommit = async (url: string, mutationName: string, commit: Commit) =
 const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: object) => {
   const { data } = await axios.post(url, payload)
   commit(mutationName, data)
+  return data
+}
+// 把POST和GET方法进行合并
+const asyncAndCommit = async (url: string, mutationName: string, commit: Commit, config: AxiosRequestConfig = { method: 'GET' }, extraData?: any) => {
+  const { data } = await axios(url, config)
+  if (extraData) {
+    commit(mutationName, { data, extraData })
+  } else {
+    commit(mutationName, data)
+  }
   return data
 }
 const store = createStore<GlobalDataProps>({
@@ -136,7 +146,7 @@ const store = createStore<GlobalDataProps>({
       return postAndCommit('/posts', 'createPost', commit, { ...payload })
     },
     deletePost ({ commit }, id) {
-      return postAndCommit(`/posts/${id}`, 'deletePost', commit, { method: 'delete' })
+      return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, { method: 'delete' })
     },
     loginAndFetch ({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => {
