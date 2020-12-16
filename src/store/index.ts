@@ -88,7 +88,6 @@ const store = createStore<GlobalDataProps>({
       state.posts[newPost._id] = newPost
     },
     deletePost (state, { data }) {
-      console.log('deletePost data', data)
       delete state.posts[data._id]
     },
     fetchColumns (state, rawData) {

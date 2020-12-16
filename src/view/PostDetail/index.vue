@@ -54,7 +54,6 @@ export default defineComponent({
     const modalIsVisible = ref(false)
     onMounted(() => {
       store.dispatch('fetchPost', currentId)
-      console.log(router)
     })
     const currentPost = computed<PostProps>(() => store.getters.getCurrentPost(currentId))
     const currentHTML = computed(() => {

@@ -96,7 +96,7 @@ export default defineComponent({
           createMessage('注册成功 正在跳转登录页面', 'success')
           router.push('/login')
         }).catch(e => {
-          console.log(e)
+          console.error(e)
         })
       }
     }

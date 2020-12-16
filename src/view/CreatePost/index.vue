@@ -1,11 +1,12 @@
 <template>
   <div class="create-post-page">
-    <h4>新建文章</h4>
+    <h4>{{isEditMode ? '编辑文章' : '新建文章'}}</h4>
     <upload
       action="/upload"
       :beforeUpload="uploadCheck"
       @file-uploaded="handleFileUploaded"
       @file-uploaded-error="handleFileFail"
+      :uploaded="uploadedData"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4 file-upload-container"
     >
       <h2>点击上传头图</h2>
@@ -41,16 +42,16 @@
         />
       </div>
       <template #submit>
-        <button class="btn btn-primary btn-large">发表文章</button>
+        <button class="btn btn-primary btn-large">{{isEditMode ? '更新文章' : '发表文章'}}</button>
       </template>
     </validate-form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '../../store/index'
 import ValidateForm from '@/components/ValidateForm/index.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput/index.vue'
@@ -64,7 +65,10 @@ export default defineComponent({
     Upload
   },
   setup () {
+    const uploadedData = ref()
     const router = useRouter()
+    const route = useRoute()
+    const isEditMode = !!route.query.id
     const store = useStore<GlobalDataProps>()
     const titleVal = ref('')
     const contentVal = ref('')
@@ -75,6 +79,19 @@ export default defineComponent({
     const contentRules: RulesProp = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    onMounted(() => {
+      if (isEditMode) {
+        store.dispatch('fetchPost', route.query.id).then((rawData: ResponseType<PostProps>) => {
+          const currentPost = rawData.data
+          if (currentPost.image) {
+            uploadedData.value = { data: currentPost.image }
+          }
+          console.log('uploadedData--->', uploadedData.value)
+          titleVal.value = currentPost.title
+          contentVal.value = currentPost.content || ''
+        })
+      }
+    })
     const handleFileUploaded = (rawData: ResponseType<ImageProps>) => {
       CreateMessage('上传成功', 'success')
       if (rawData.data._id) {
@@ -82,7 +99,7 @@ export default defineComponent({
       }
     }
     const handleFileFail = (error: any) => {
-      console.log(error)
+      console.error(error)
       CreateMessage('上传失败', 'error')
     }
     const onFormSubmit = (result: boolean) => {
@@ -98,8 +115,12 @@ export default defineComponent({
           if (imageId) {
             newPost.image = imageId
           }
-          store.dispatch('createPost', newPost).then((res) => {
-            console.log(res)
+          const actionName = isEditMode ? 'updatePost' : 'createPost'
+          const sendData = isEditMode ? {
+            id: route.query.id,
+            payload: newPost
+          } : newPost
+          store.dispatch(actionName, sendData).then(() => {
             CreateMessage('发表成功', 'success')
             router.push({ name: 'column', params: { id: column } })
           })
@@ -125,7 +146,9 @@ export default defineComponent({
       onFormSubmit,
       uploadCheck,
       handleFileUploaded,
-      handleFileFail
+      handleFileFail,
+      uploadedData,
+      isEditMode
     }
   }
 })
@@ -135,11 +158,26 @@ export default defineComponent({
 .create-post-page .file-upload-container {
   height: 200px;
   cursor: pointer;
+  overflow: hidden;
 }
 .create-post-page .file-upload-container img{
   height: 100%;
   width: 100%;
   object-fit: cover;
   cursor: pointer;
+}
+.uploaded-area {
+  position: relative;
+}
+.uploaded-area:hover h3 {
+  display: block;
+}
+.uploaded-area h3 {
+  display: none;
+  position: absolute;
+  color: #999;
+  text-align: center;
+  width: 100%;
+  top: 50%;
 }
 </style>
