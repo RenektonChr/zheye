@@ -12,6 +12,9 @@
         <ul class="list-inline mb-0">
           <li class="list-inline-item">格物</li>
           <li class="list-inline-item">致知</li>
+          <li class="list-inline-item">诚意</li>
+          <li class="list-inline-item">正心</li>
+          <li class="list-inline-item">@ 2020 然哥专栏</li>
         </ul>
       </small>
     </Footer>
